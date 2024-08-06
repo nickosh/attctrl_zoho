@@ -1,0 +1,84 @@
+[project]
+name = "attctrl"
+version = "0.1.0"
+description = "Zoho People Attendance Controller"
+authors = [
+    { name = "nickosh", email = "nikolay.shishov@gmail.com" }
+]
+dependencies = [
+    "python-fasthtml>=0.2.3",
+    "python-decouple>=3.8",
+    "playwright>=1.45.1",
+]
+readme = "README.md"
+requires-python = ">= 3.11"
+license = { text = "MIT" }
+
+[project.scripts]
+"attctrl" = "attctrl:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "ruff>=0.5.6",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/attctrl"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "test"]
+target-version = "py311"
+include = ["*.py", "*.pyi", "**/pyproject.toml"]
+
+select = [
+  "I",   # iSort
+  "F",   # PyFlakes
+  "E",   # pycodestyle
+  "W",   # Warning
+  "N",   # pep8-naming
+  "YTT", # flake8-2020
+  "B",   # flake8-bugbear
+  "A",   # flake8-builtins
+  "C4",  # flake8-comprehensions
+  "T10", # flake8-debugger
+  "G",   # flake8-logging-format
+  "PT",  # flake8-pytest-style
+  "RET", # flake8-return
+  "SIM", # flake8-simplify
+  "TID", # flake8-tidy-imports
+  "ARG", # flake8-unused-arguments
+  "PTH", # flake8-use-pathlib
+  "ERA", # eradicate
+  "PLC", # Pylint Convention
+  "PLE", # Pylint Error
+  "PLR", # Pylint Refactor
+  "PLW", # Pylint Warning
+  "RUF", # Ruff-specific rules
+]
+
+ignore = [
+  "PLR0913", # Too many arguments to function call
+  "I001", # Import block is un-sorted or un-formatted
+  "RET505", # Unnecessary `else` after `return` statement
+  "E501", # Line too long
+  "E999", # Syntax Error as it doesnt understand match commands from Python 3.10+
+  "G004", # Logging statement uses f-string
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.format]
+line-ending = "lf"
+indent-style = "space"
+quote-style = "double"
+skip-magic-trailing-comma = true
