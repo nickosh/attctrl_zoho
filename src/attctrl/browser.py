@@ -19,8 +19,8 @@ class LoginPage(BasicPage):
         super().__init__(page)
         self.username_input = page.locator("input[placeholder='Email address or mobile number']")
         self.password_input = page.locator("input[placeholder='Enter password']")
-        self.next_button = page.locator("button#nextbtn:has-text('Next')")
-        self.understand_button = page.locator("button#continue_button:has-text('I Understand')")
+        self.next_button = page.locator("button#nextbtn")
+        self.understand_button = page.locator("button#continue_button")
         self.daily_limit = page.locator("text=You've reached your daily sign-in limit.")
 
     def is_daily_limit_warning(self) -> bool:
@@ -43,9 +43,11 @@ class DashboardPage:
         self.page = page
         self.url = "**/dashboard"
         self.iframe = "iframe#peopleLoadFrame"
-        self.atte_header = "h3.dash-title[title='Attendance']"
-        self.time_span = "span#ZPAtt_Dash_CurrTime"
-        self.att_button = self.page.frame_locator(self.iframe).locator("button.out.chlodIng")
+        self.att_button = (
+            self.page.frame_locator(self.iframe)
+            .locator("button", has_text="Check-in")
+            .or_(page.locator("button", has_text="Check-out"))
+        )
 
     def wait_for_loading(self):
         self.page.wait_for_url(self.url)
@@ -55,8 +57,12 @@ class BrowserControl:
     def __init__(self, url: str = Config.ZOHO_LOGIN_LINK) -> None:
         self.playwright = sync_playwright().start()
         self.browser = self.playwright.chromium.launch(headless=not Config.DEBUG)
-        self.context = self.browser.new_context()
-        self.page = self.browser.new_page()
+        self.context = self.browser.new_context(
+            permissions=["geolocation"],
+            geolocation={"latitude": 52.52, "longitude": 13.39},
+            viewport={"width": 1280, "height": 720},
+        )
+        self.page = self.context.new_page()
         self.login_pg = LoginPage(self.page)
         self.dashboard_pg = DashboardPage(self.page)
 
@@ -86,15 +92,39 @@ class BrowserControl:
         self.dashboard_pg.att_button.wait_for(state="visible")
 
     def switch_attendancy(self):
-        logger.debug(self.context.cookies())
-        self.dashboard_pg.att_button.click()
         self.context.grant_permissions(["geolocation"])
+        self.dashboard_pg.att_button.click()
+        self.page.wait_for_timeout(5 * 1000)
 
-    def get_att_state(self):
-        return self.dashboard_pg.att_button.inner_text()
+    def get_att_state(self) -> str:
+        return self.dashboard_pg.att_button.inner_text().split()[0]
 
+    def do_check_in(self) -> bool:
+        try:
+            self.login()
+            if "Check-in" not in self.get_att_state():
+                logger.error(
+                    "Can't check-in because current attendancy state is already 'Check-in'"
+                )
+                return False
+            self.switch_attendancy()
+            return True
+        except Exception:
+            return False
 
-bc = BrowserControl()
-bc.login()
-print(bc.get_att_state())
-bc.switch_attendancy()
+    def do_check_out(self) -> bool:
+        try:
+            self.login()
+            if "Check-out" not in self.get_att_state():
+                logger.error(
+                    "Can't check-out because current attendancy state is already 'Check-out'"
+                )
+                return False
+            self.switch_attendancy()
+            return True
+        except Exception:
+            return False
+
+    def do_test(self) -> bool:
+        logger.info("Test task triggered")
+        return True
