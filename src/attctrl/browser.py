@@ -59,7 +59,7 @@ class BrowserControl:
         self.browser = self.playwright.chromium.launch(headless=not Config.DEBUG)
         self.context = self.browser.new_context(
             permissions=["geolocation"],
-            geolocation={"latitude": 52.52, "longitude": 13.39},
+            geolocation={"latitude": Config.GEOLOC_LAT, "longitude": Config.GEOLOC_LONG},
             viewport={"width": 1280, "height": 720},
         )
         self.page = self.context.new_page()
