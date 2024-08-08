@@ -6,9 +6,12 @@ authors = [
     { name = "nickosh", email = "nikolay.shishov@gmail.com" }
 ]
 dependencies = [
-    "python-fasthtml>=0.2.3",
     "python-decouple>=3.8",
     "playwright>=1.45.1",
+    "apscheduler>=3.10.4",
+    "sqlalchemy>=2.0.32",
+    "fasthx>=1.1.1",
+    "fastapi[standard]>=0.112.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.11"
