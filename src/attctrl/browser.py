@@ -3,7 +3,7 @@ from playwright.sync_api import Page, expect, sync_playwright
 from attctrl.config import Config
 from attctrl.logger import new_logger
 
-logger = new_logger(__name__, log_file="debug.log")
+logger = new_logger(__name__)
 
 
 class BasicPage:
@@ -128,3 +128,21 @@ class BrowserControl:
     def do_test(self) -> bool:
         logger.info("Test task triggered")
         return True
+
+
+def zoho_check_in():
+    if BrowserControl().do_check_in():
+        logger.info("Zoho check-in successfully completed")
+    else:
+        logger.error("Zoho check-in failed!")
+
+
+def zoho_check_out():
+    if BrowserControl().do_check_out():
+        logger.info("Zoho check-out successfully completed")
+    else:
+        logger.error("Zoho check-out failed!")
+
+
+def zoho_test():
+    BrowserControl().do_test()
