@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block header %}
+<title>Hello world!</title>
+{% endblock header %}
+
+{% block content %}
+<div hx-get="/tasks" hx-trigger="load" />
+{% endblock content %}
