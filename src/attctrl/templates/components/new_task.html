@@ -1,0 +1,51 @@
+<div id="new_task_form">
+    <h2>Create task</h2>
+    <form hx-post="/tasks" hx-target="#task-view" hx-swap="outerHTML">
+        <fieldset class="grid">
+            <input type="text" name="hours" aria-label="Hours">
+            <input type="text" name="minutes" aria-label="Minutes">
+            <input type="text" name="seconds" aria-label="Seconds">
+        </fieldset>
+        <fieldset>
+            <legend>Task type:</legend>
+            <input type="radio" id="checkin" name="task_type" value="checkin" />
+            <label htmlFor="checkin">Check-in</label>
+            <input type="radio" id="checkout" name="task_type" value="checkout" />
+            <label htmlFor="checkout">Check-out</label>
+            <input type="radio" id="test" name="task_type" value="test" />
+            <label htmlFor="test">Test</label>
+        </fieldset>
+        <fieldset>
+            <legend>Days of week:</legend>
+            <label>
+                <input type="checkbox" name="monday" value="mon" />
+                Monday
+            </label>
+            <label>
+                <input type="checkbox" name="tuesday" value="tue" />
+                Tuesday
+            </label>
+            <label>
+                <input type="checkbox" name="wednesday" value="wed" />
+                Wednesday"
+            </label>
+            <label>
+                <input type="checkbox" name="thursday" value="thu" />
+                Thursday
+            </label>
+            <label>
+                <input type="checkbox" name="friday" value="fri" />
+                Friday
+            </label>
+            <label>
+                <input type="checkbox" name="saturday" value="sat" />
+                Saturday
+            </label>
+            <label>
+                <input type="checkbox" name="sunday" value="sun" />
+                Sunday
+            </label>
+        </fieldset>
+        <input type="submit" value="Create new task" />
+    </form>
+</div>

@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% block header %}
-<title>Hello world!</title>
+<title>Zoho AttCtrl</title>
 {% endblock header %}
 
 {% block content %}
+<h1>Zoho People Attendance Control</h1>
+{% include "components/new_task.html" %}
 <div hx-get="/tasks" hx-trigger="load" />
 {% endblock content %}
