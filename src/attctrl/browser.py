@@ -76,6 +76,12 @@ class BrowserControl:
     def __del__(self):
         self.teardown()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.teardown()
+
     def login(self, username: str = Config.ZOHO_USERNAME, password: str = Config.ZOHO_PASSWORD):
         self.login_pg.username_input.fill(username)
         self.login_pg.next_button.click()
@@ -131,18 +137,21 @@ class BrowserControl:
 
 
 def zoho_check_in():
-    if BrowserControl().do_check_in():
-        logger.info("Zoho check-in successfully completed")
-    else:
-        logger.error("Zoho check-in failed!")
+    with BrowserControl() as browser:
+        if browser.do_check_in():
+            logger.info("Zoho check-in successfully completed")
+        else:
+            logger.error("Zoho check-in failed!")
 
 
 def zoho_check_out():
-    if BrowserControl().do_check_out():
-        logger.info("Zoho check-out successfully completed")
-    else:
-        logger.error("Zoho check-out failed!")
+    with BrowserControl() as browser:
+        if browser.do_check_out():
+            logger.info("Zoho check-out successfully completed")
+        else:
+            logger.error("Zoho check-out failed!")
 
 
 def zoho_test():
-    BrowserControl().do_test()
+    with BrowserControl() as browser:
+        browser.do_test()

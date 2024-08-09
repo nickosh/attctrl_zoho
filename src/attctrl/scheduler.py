@@ -5,6 +5,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from pydantic import BaseModel
 
+from attctrl.config import Config
 from attctrl.logger import new_logger
 
 logger = new_logger(__name__)
@@ -25,7 +26,7 @@ class Task(BaseModel):
 
 
 class TaskScheduler:
-    def __init__(self, jobs_dir: str = "jobs"):
+    def __init__(self, jobs_dir: str = Config.DATA_DIR.as_posix()):
         self.jobstore = SQLAlchemyJobStore(url=f"sqlite:///{jobs_dir}/jobs.sqlite")
         self.scheduler = BackgroundScheduler(jobstores={"default": self.jobstore})
         self.scheduler.start()

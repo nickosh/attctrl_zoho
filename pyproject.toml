@@ -1,7 +1,7 @@
 [project]
 name = "attctrl"
 version = "0.1.0"
-description = "Zoho People Attendance Controller"
+description = "Zoho People Attendance Control"
 authors = [
     { name = "nickosh", email = "nikolay.shishov@gmail.com" }
 ]
