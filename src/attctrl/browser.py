@@ -1,3 +1,5 @@
+import threading
+
 from playwright.sync_api import Page, expect, sync_playwright
 
 from attctrl.config import Config
@@ -42,15 +44,21 @@ class DashboardPage:
     def __init__(self, page: Page) -> None:
         self.page = page
         self.url = "**/dashboard"
+        self.logout_url = "**/logout.html"
         self.iframe = "iframe#peopleLoadFrame"
         self.att_button = (
             self.page.frame_locator(self.iframe)
             .locator("button", has_text="Check-in")
             .or_(page.locator("button", has_text="Check-out"))
         )
+        self.profile_avatar = self.page.locator("._unifiedui-profile-dp")
+        self.sign_out_link = self.page.locator("span:has-text('Sign Out')")
 
     def wait_for_loading(self):
         self.page.wait_for_url(self.url)
+
+    def wait_for_logout(self):
+        self.page.wait_for_url(self.logout_url)
 
 
 class BrowserControl:
@@ -68,10 +76,16 @@ class BrowserControl:
 
         self.page.goto(url)
 
+        self._teardown_lock = threading.Lock()
+        self._is_teardown = False
+
     def teardown(self):
-        self.context.close()
-        self.browser.close()
-        self.playwright.stop()
+        if not self._is_teardown:
+            self._is_teardown = True
+            with self._teardown_lock:
+                self.context.close()
+                self.browser.close()
+                self.playwright.stop()
 
     def __del__(self):
         self.teardown()
@@ -97,6 +111,12 @@ class BrowserControl:
         self.dashboard_pg.wait_for_loading()
         self.dashboard_pg.att_button.wait_for(state="visible")
 
+    def logout(self):
+        self.dashboard_pg.wait_for_loading()
+        self.dashboard_pg.profile_avatar.click()
+        self.dashboard_pg.sign_out_link.click()
+        self.dashboard_pg.wait_for_logout()
+
     def switch_attendancy(self):
         self.context.grant_permissions(["geolocation"])
         self.dashboard_pg.att_button.click()
@@ -117,6 +137,8 @@ class BrowserControl:
             return True
         except Exception:
             return False
+        finally:
+            self.logout()
 
     def do_check_out(self) -> bool:
         try:
@@ -130,6 +152,8 @@ class BrowserControl:
             return True
         except Exception:
             return False
+        finally:
+            self.logout()
 
     def do_test(self) -> bool:
         logger.info("Test task triggered")
