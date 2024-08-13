@@ -3,7 +3,6 @@
 <script>
     const validate = new JustValidate('#new-task-form', {
         lockForm: true,
-        validateBeforeSubmitting: true,
     });
 
     validate
@@ -24,6 +23,10 @@
             { errorsContainer: '#dow-group-errors-container', }
 
         )
+        .onSuccess((event) => {
+            event.preventDefault();
+            htmx.trigger('#new-task-form', 'validated-submit');
+        });
 </script>
 <script>
     document.body.addEventListener('htmx:afterRequest', function (evt) {

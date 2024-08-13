@@ -2,7 +2,7 @@
     <summary role="button" class="outline">New task</summary>
     <div id="new-task">
         <form id="new-task-form" hx-post="/tasks" hx-target="#task-view" hx-swap="outerHTML"
-            hx-on::after-request="this.reset()">
+            hx-trigger="validated-submit" hx-on::after-request="this.reset()">
             <fieldset>
                 <div class="grid">
                     <input type="text" id="time" name="time" aria-label="Time" placeholder="Time (HH:MM:SS)">
