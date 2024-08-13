@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import FastAPI, Form, Request
 from fastapi.templating import Jinja2Templates
@@ -26,10 +26,10 @@ def add_test_task():
 @jinja.hx("components/task_view.html")
 def create_task(
     request: Request,
-    hours: str = Form(...),
-    minutes: str = Form(...),
-    seconds: str = Form(...),
+    time: str = Form(...),
     task_type: str = Form(..., alias="task_type"),
+    jitter: Optional[int] = Form(None),
+    timezone: Optional[str] = Form(None),
     monday: str = Form(None),
     tuesday: str = Form(None),
     wednesday: str = Form(None),
@@ -41,13 +41,14 @@ def create_task(
     days = ",".join(
         [day for day in [monday, tuesday, wednesday, thursday, friday, saturday, sunday] if day]
     )
-    time = f"{hours.zfill(2)}:{minutes.zfill(2)}:{seconds.zfill(2)}"
     task_function = {"checkin": zoho_check_in, "checkout": zoho_check_out, "test": zoho_test}.get(
         task_type
     )
 
     if task_function:
-        tasker.add_task(task_function, days, time)
+        tasker.add_task(
+            task_func=task_function, day_of_week=days, time=time, jitter=jitter, timezone=timezone
+        )
 
     return tasker.get_tasks()
 

@@ -5,6 +5,14 @@
 
 {% block content %}
 <h1>Zoho People Attendance Control</h1>
-{% include "components/new_task.html" %}
+<section>
+    {% include "components/new_task.html" %}
+</section>
+</section>
 <div hx-get="/tasks" hx-trigger="load" />
+</section>
 {% endblock content %}
+
+{% block script %}
+{% include "scripts.html" %}
+{% endblock script %}

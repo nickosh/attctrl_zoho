@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -23,6 +23,8 @@ class Task(BaseModel):
     func: str
     dow: str
     time: str
+    jitter: Optional[int]
+    timezone: Optional[str]
 
 
 class TaskScheduler:
@@ -31,20 +33,34 @@ class TaskScheduler:
         self.scheduler = BackgroundScheduler(jobstores={"default": self.jobstore})
         self.scheduler.start()
 
-    def add_task(self, task_func, day_of_week: str, time: str):
+    def add_task(
+        self,
+        task_func,
+        day_of_week: str,
+        time: str,
+        timezone: Optional[str] = None,
+        jitter: Optional[int] = None,
+    ):
         """
         Add a new task to the scheduler.
 
         :param task_func: The function to be executed
         :param day_of_week: Day(s) of the week to run the task (e.g., 'mon,tue,wed')
         :param time: Time to run the task in HH:MM:SS format
+        :param timezone: The timezone for the task (e.g., 'UTC', 'America/New_York')
+        :param jitter: Maximum time (in seconds) to randomly delay the task execution
         """
         hour, minute, second = map(int, time.split(":"))
         try:
             self.scheduler.add_job(
                 task_func,
                 trigger=CronTrigger(
-                    day_of_week=day_of_week, hour=hour, minute=minute, second=second
+                    day_of_week=day_of_week,
+                    hour=hour,
+                    minute=minute,
+                    second=second,
+                    timezone=timezone,
+                    jitter=jitter,
                 ),
                 replace_existing=True,
             )
@@ -77,6 +93,8 @@ class TaskScheduler:
                 func=job.func.__name__,
                 dow=str(job.trigger.fields[CronIndexMap.dow]),
                 time=f"{str(job.trigger.fields[CronIndexMap.hour]).zfill(2)}:{str(job.trigger.fields[CronIndexMap.minute]).zfill(2)}:{str(job.trigger.fields[CronIndexMap.second]).zfill(2)}",
+                jitter=job.trigger.jitter,
+                timezone=str(job.trigger.timezone),
             )
             for job in jobs
         ]
@@ -86,18 +104,3 @@ class TaskScheduler:
         Shut down the scheduler.
         """
         self.scheduler.shutdown(wait=True)
-
-
-# Example usage:
-# def some_function():
-#     print("Executing some_function")
-#
-# def another_function():
-#     print("Executing another_function")
-#
-# scheduler = TaskScheduler()
-# scheduler.add_task(some_function, 'task1', 'mon,wed,fri', '09:00')
-# scheduler.add_task(another_function, 'task2', 'tue,thu', '14:30')
-# print(scheduler.get_tasks())
-# scheduler.remove_task('task1')
-# scheduler.shutdown()

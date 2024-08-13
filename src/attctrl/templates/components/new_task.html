@@ -1,51 +1,64 @@
-<div id="new_task_form">
-    <h2>Create task</h2>
-    <form hx-post="/tasks" hx-target="#task-view" hx-swap="outerHTML">
-        <fieldset class="grid">
-            <input type="text" name="hours" aria-label="Hours">
-            <input type="text" name="minutes" aria-label="Minutes">
-            <input type="text" name="seconds" aria-label="Seconds">
-        </fieldset>
-        <fieldset>
-            <legend>Task type:</legend>
-            <input type="radio" id="checkin" name="task_type" value="checkin" />
-            <label htmlFor="checkin">Check-in</label>
-            <input type="radio" id="checkout" name="task_type" value="checkout" />
-            <label htmlFor="checkout">Check-out</label>
-            <input type="radio" id="test" name="task_type" value="test" />
-            <label htmlFor="test">Test</label>
-        </fieldset>
-        <fieldset>
-            <legend>Days of week:</legend>
-            <label>
-                <input type="checkbox" name="monday" value="mon" />
-                Monday
-            </label>
-            <label>
-                <input type="checkbox" name="tuesday" value="tue" />
-                Tuesday
-            </label>
-            <label>
-                <input type="checkbox" name="wednesday" value="wed" />
-                Wednesday"
-            </label>
-            <label>
-                <input type="checkbox" name="thursday" value="thu" />
-                Thursday
-            </label>
-            <label>
-                <input type="checkbox" name="friday" value="fri" />
-                Friday
-            </label>
-            <label>
-                <input type="checkbox" name="saturday" value="sat" />
-                Saturday
-            </label>
-            <label>
-                <input type="checkbox" name="sunday" value="sun" />
-                Sunday
-            </label>
-        </fieldset>
-        <input type="submit" value="Create new task" />
-    </form>
-</div>
+<details>
+    <summary role="button" class="outline">New task</summary>
+    <div id="new-task">
+        <form id="new-task-form" hx-post="/tasks" hx-target="#task-view" hx-swap="outerHTML"
+            hx-on::after-request="this.reset()">
+            <fieldset>
+                <div class="grid">
+                    <input type="text" id="time" name="time" aria-label="Time" placeholder="Time (HH:MM:SS)">
+                    <div role="group">
+                        <input type="number" name="jitter" aria-label="Jitter"
+                            placeholder="Jitter (random start, +/- sec)">
+                        <input type="text" name="timezone" aria-label="Timezone"
+                            placeholder="Timezone (def: server's zone)">
+                    </div>
+                </div>
+                <div id="time-input-errors-container"></div>
+            </fieldset>
+            <fieldset>
+                <legend>Task type:</legend>
+                <input type="radio" id="checkin" name="task_type" value="checkin" checked />
+                <label htmlFor="checkin">Check-in</label>
+                <input type="radio" id="checkout" name="task_type" value="checkout" />
+                <label htmlFor="checkout">Check-out</label>
+                <!-- <input type="radio" id="test" name="task_type" value="test" />
+                <label htmlFor="test">Test</label> -->
+            </fieldset>
+            <fieldset>
+                <div id="dow-group" class="grid">
+                    <legend>Days of week:</legend>
+                    <label>
+                        <input type="checkbox" id="dow-group-1" name="monday" value="mon" />
+                        Monday
+                    </label>
+                    <label>
+                        <input type="checkbox" id="dow-group-2" name="tuesday" value="tue" />
+                        Tuesday
+                    </label>
+                    <label>
+                        <input type="checkbox" id="dow-group-3" name="wednesday" value="wed" />
+                        Wednesday
+                    </label>
+                    <label>
+                        <input type="checkbox" id="dow-group-4" name="thursday" value="thu" />
+                        Thursday
+                    </label>
+                    <label>
+                        <input type="checkbox" id="dow-group-5" name="friday" value="fri" />
+                        Friday
+                    </label>
+                    <label>
+                        <input type="checkbox" id="dow-group-6" name="saturday" value="sat" />
+                        Saturday
+                    </label>
+                    <label>
+                        <input type="checkbox" id="dow-group-7" name="sunday" value="sun" />
+                        Sunday
+                    </label>
+                </div>
+                <div id="dow-group-errors-container"></div>
+            </fieldset>
+            <input type="submit" value="Create new task" />
+        </form>
+    </div>
+</details>

@@ -4,9 +4,11 @@
         <thead>
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Function</th>
+                <th scope="col">Task type</th>
                 <th scope="col">Days of week</th>
                 <th scope="col">Time</th>
+                <th scope="col">Jitter</th>
+                <th scope="col">Timezone</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -17,9 +19,11 @@
                 <td>{{task.func}}</td>
                 <td>{{task.dow}}</td>
                 <td>{{task.time}}</td>
+                <td>{{task.jitter}}</td>
+                <td>{{task.timezone}}</td>
                 <td>
-                    <button type="button" class="outline pico-color-red-550" hx-delete="/tasks/{{task.id}}"
-                        hx-target="#task-view" hx-swap="outerHTML">
+                    <button type="button" class="outline" hx-delete="/tasks/{{task.id}}" hx-target="#task-view"
+                        hx-swap="outerHTML">
                         Delete
                     </button>
                 </td>
