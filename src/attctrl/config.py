@@ -19,6 +19,7 @@ class Config:
 
         APP_DIR = Path(__file__).resolve().parents[0]
         TEMPLATE_DIR = Path(APP_DIR, "templates")
+        STATIC_DIR = Path(APP_DIR, "static")
         ROOT_DIR = Path(__file__).resolve().parents[2]
         DATA_DIR = Path(ROOT_DIR, "data")
         DATA_DIR.mkdir(exist_ok=True)

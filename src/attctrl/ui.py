@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from fastapi import FastAPI, Form, Request
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fasthx import Jinja
 
@@ -13,6 +14,7 @@ logger = new_logger(__name__)
 
 tasker = TaskScheduler()
 app = FastAPI(workers=1)
+app.mount("/static", StaticFiles(directory=Config.STATIC_DIR), name="static")
 jinja = Jinja(Jinja2Templates(Config.TEMPLATE_DIR))
 
 
