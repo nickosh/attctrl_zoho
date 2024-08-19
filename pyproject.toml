@@ -7,11 +7,11 @@ authors = [
 ]
 dependencies = [
     "python-decouple>=3.8",
-    "playwright>=1.45.1",
+    "playwright>=1.46.0",
     "apscheduler>=3.10.4",
     "sqlalchemy>=2.0.32",
     "fasthx>=1.1.1",
-    "fastapi[standard]>=0.112.0",
+    "fastapi[standard]>=0.112.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.11"
@@ -27,7 +27,7 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = [
-    "ruff>=0.5.6",
+    "ruff>=0.6.1",
 ]
 
 [tool.hatch.metadata]
@@ -74,7 +74,6 @@ ignore = [
   "RET505", # Unnecessary `else` after `return` statement
   "E501", # Line too long
   "E999", # Syntax Error as it doesnt understand match commands from Python 3.10+
-  "G004", # Logging statement uses f-string
 ]
 
 [tool.ruff.lint.isort]
