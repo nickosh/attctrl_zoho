@@ -27,7 +27,7 @@ def add_test_task():
 @app.post("/tasks")
 @jinja.hx("components/task_view.html")
 def create_task(
-    request: Request,
+    _: Request,
     time: str = Form(...),
     task_type: str = Form(..., alias="task_type"),
     jitter: Optional[int] = Form(None),

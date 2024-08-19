@@ -15,4 +15,3 @@ services:
 volumes:
   attctrl_data:
     name: attctrl_data
-

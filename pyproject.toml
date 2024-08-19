@@ -28,6 +28,7 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = [
     "ruff>=0.6.1",
+    "pre-commit>=3.8.0",
 ]
 
 [tool.hatch.metadata]
@@ -74,6 +75,7 @@ ignore = [
   "RET505", # Unnecessary `else` after `return` statement
   "E501", # Line too long
   "E999", # Syntax Error as it doesnt understand match commands from Python 3.10+
+  "G004", # Logging statement uses f-string
 ]
 
 [tool.ruff.lint.isort]
