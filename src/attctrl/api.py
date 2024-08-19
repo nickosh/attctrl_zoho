@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+import sentry_sdk
 from fastapi import FastAPI, Form, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -11,6 +12,9 @@ from attctrl.logger import new_logger
 from attctrl.scheduler import Task, TaskScheduler
 
 logger = new_logger(__name__)
+
+if Config.GLITCHTIP_DNS:
+    sentry_sdk.init(Config.GLITCHTIP_DNS)
 
 tasker = TaskScheduler()
 app = FastAPI(workers=1)
@@ -66,6 +70,11 @@ def delete_task(task_id: str) -> List[Task]:
 @jinja.hx("components/task_view.html")
 def view_tasks() -> List[Task]:
     return tasker.get_tasks()
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
 
 
 @app.get("/")

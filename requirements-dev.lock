@@ -21,6 +21,7 @@ apscheduler==3.10.4
 certifi==2024.7.4
     # via httpcore
     # via httpx
+    # via sentry-sdk
 cfgv==3.4.0
     # via pre-commit
 click==8.1.7
@@ -96,6 +97,8 @@ pyyaml==6.0.2
 rich==13.7.1
     # via typer
 ruff==0.6.1
+sentry-sdk==2.13.0
+    # via attctrl
 shellingham==1.5.4
     # via typer
 six==1.16.0
@@ -119,6 +122,8 @@ typing-extensions==4.12.2
     # via typer
 tzlocal==5.2
     # via apscheduler
+urllib3==2.2.2
+    # via sentry-sdk
 uvicorn==0.30.6
     # via fastapi
     # via fastapi-cli

@@ -10,6 +10,7 @@ logger = new_logger(__name__)
 class Config:
     try:
         DEBUG = config("DEBUG", default=False, cast=bool)
+        GLITCHTIP_DNS = config("GLITCHTIP_DNS", default="")
         ZOHO_USERNAME = config("ZOHO_USERNAME")
         ZOHO_PASSWORD = config("ZOHO_PASSWORD")
         ZOHO_COMPANY_ID = config("ZOHO_COMPANY_ID")
