@@ -31,11 +31,8 @@ email-validator==2.2.0
     # via fastapi
 fastapi==0.112.1
     # via attctrl
-    # via fasthx
 fastapi-cli==0.0.5
     # via fastapi
-fasthx==1.1.1
-    # via attctrl
 greenlet==3.0.3
     # via playwright
     # via sqlalchemy
@@ -99,7 +96,6 @@ typer==0.12.4
     # via fastapi-cli
 typing-extensions==4.12.2
     # via fastapi
-    # via fasthx
     # via pydantic
     # via pydantic-core
     # via pyee

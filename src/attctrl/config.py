@@ -1,4 +1,5 @@
 from pathlib import Path
+from secrets import token_urlsafe
 
 from decouple import config
 
@@ -11,6 +12,8 @@ class Config:
     try:
         DEBUG = config("DEBUG", default=False, cast=bool)
         GLITCHTIP_DNS = config("GLITCHTIP_DNS", default="")
+        PASSWORD_PROTECT = config("PASSWORD_PROTECT", default=False, cast=bool)
+        AUTH_TOKEN = token_urlsafe()
         ZOHO_USERNAME = config("ZOHO_USERNAME")
         ZOHO_PASSWORD = config("ZOHO_PASSWORD")
         ZOHO_COMPANY_ID = config("ZOHO_COMPANY_ID")

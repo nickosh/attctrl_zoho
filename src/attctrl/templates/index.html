@@ -4,7 +4,12 @@
 {% endblock header %}
 
 {% block content %}
-<h1>Zoho People Attendance Control</h1>
+<section class="grid">
+    <h1>Zoho People Attendance Control</h1>
+    {% if Config.PASSWORD_PROTECT %}
+    <button hx-post="/logout" hx-trigger="click" hx-swap="none">Logout</button>
+    {% endif %}
+</section>
 <section>
     {% include "components/new_task.html" %}
 </section>

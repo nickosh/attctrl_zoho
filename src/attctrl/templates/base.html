@@ -9,7 +9,7 @@
   {% block header %} {% endblock %}
 </head>
 
-<body>
+<body hx-headers='{"X-API-Key": "{{ request.cookies.get("X-API-Key", "") }}"}'>
   <main class="container">
     {% block content %} {% endblock content %}
   </main>
