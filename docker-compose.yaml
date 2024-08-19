@@ -1,0 +1,18 @@
+services:
+  attctrl:
+    build: .
+    container_name: "attctrl"
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - APP_PORT=${APP_PORT:-9898}
+    ports:
+      - "${APP_PORT:-9898}:${APP_PORT:-9898}"
+    volumes:
+    - attctrl_data:/app/data
+
+volumes:
+  attctrl_data:
+    name: attctrl_data
+
