@@ -2,14 +2,14 @@ from typing import Optional
 
 import sentry_sdk
 from fastapi import Depends, FastAPI, Form, HTTPException, Request, Security, status
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.security import APIKeyHeader
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from attctrl.browser import zoho_check_in, zoho_check_out, zoho_test
 from attctrl.config import Config
-from attctrl.logger import new_logger
+from attctrl.logger import new_logger, notification_queue
 from attctrl.scheduler import TaskScheduler
 
 logger = new_logger(__name__)
@@ -158,3 +158,11 @@ async def logout(_: Request):
     response.delete_cookie(API_KEY_NAME)
     response.headers["HX-Redirect"] = "/login"
     return response
+
+@app.get("/api/notifications")
+async def get_notifications(token: bool = Depends(verify_token)):
+    if not token:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated")
+    notifications = list(notification_queue)
+    notification_queue.clear()
+    return JSONResponse(content={"notifications": notifications})

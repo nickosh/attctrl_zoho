@@ -2,6 +2,13 @@ import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import ClassVar, Dict, List, Optional
+from collections import deque
+
+notification_queue = deque(maxlen=100)  # Limit to last 100 notifications
+
+class NotificationHandler(logging.Handler):
+    def emit(self, record):
+        notification_queue.append(self.format(record))
 
 
 class CustomFormatter(logging.Formatter):
@@ -55,6 +62,7 @@ def new_logger(
     level: str = "DEBUG",
     no_repeat: bool = False,
     log_file: Optional[str] = None,
+    enable_notifications: bool = True,
 ) -> logging.Logger:
     """
     Create a logger with a custom formatter.
@@ -85,6 +93,12 @@ def new_logger(
         )
         file_handler.setFormatter(file_formatter)
         logger.addHandler(file_handler)
+
+    # Add notification handler if enabled
+    if enable_notifications:
+        notification_handler = NotificationHandler()
+        notification_handler.setFormatter(CustomFormatter())
+        logger.addHandler(notification_handler)
 
     return logger
 
