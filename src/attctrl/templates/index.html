@@ -6,18 +6,19 @@
 {% block content %}
 <section class="grid">
     <h1>Zoho People Attendance Control</h1>
-    {% if Config.PASSWORD_PROTECT %}
+    {% if Config.APP_AUTH %}
     <button hx-post="/logout" hx-trigger="click" hx-swap="none">Logout</button>
     {% endif %}
 </section>
 <section>
     {% include "components/new_task.html" %}
 </section>
-</section>
+<section>
 <div hx-get="/tasks" hx-trigger="load" />
 </section>
 {% endblock content %}
 
 {% block script %}
-{% include "scripts.html" %}
+{% include "scripts/htmx.html" %}
+{% include "scripts/validation.html" %}
 {% endblock script %}

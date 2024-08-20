@@ -12,14 +12,17 @@ class Config:
     try:
         DEBUG = config("DEBUG", default=False, cast=bool)
         GLITCHTIP_DNS = config("GLITCHTIP_DNS", default="")
-        PASSWORD_PROTECT = config("PASSWORD_PROTECT", default=False, cast=bool)
-        AUTH_TOKEN = token_urlsafe()
         ZOHO_USERNAME = config("ZOHO_USERNAME")
         ZOHO_PASSWORD = config("ZOHO_PASSWORD")
         ZOHO_COMPANY_ID = config("ZOHO_COMPANY_ID")
         ZOHO_LOGIN_LINK = f"https://one.zoho.com/zohoone/{ZOHO_COMPANY_ID}/home/cxapp/people/"
         GEOLOC_LAT = config("GEOLOC_LAT", default=0.0, cast=float)
         GEOLOC_LONG = config("GEOLOC_LONG", default=0.0, cast=float)
+
+        AUTH_TOKEN = token_urlsafe()
+        APP_AUTH = config("APP_AUTH", default=False, cast=bool)
+        APP_USERNAME = config("APP_USERNAME", default=ZOHO_USERNAME)
+        APP_PASSWORD = config("APP_PASSWORD", default=ZOHO_PASSWORD)
 
         APP_DIR = Path(__file__).resolve().parents[0]
         TEMPLATE_DIR = Path(APP_DIR, "templates")

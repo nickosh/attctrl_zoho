@@ -27,7 +27,7 @@ api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
 
 
 async def verify_token(api_key_header: str = Security(api_key_header)):
-    if not Config.PASSWORD_PROTECT:
+    if not Config.APP_AUTH:
         return True
     if api_key_header == Config.AUTH_TOKEN:
         return True
@@ -38,7 +38,7 @@ async def verify_token(api_key_header: str = Security(api_key_header)):
 
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
-    if not Config.PASSWORD_PROTECT:
+    if not Config.APP_AUTH:
         return await call_next(request)
 
     public_paths = ["/login", "/static"]
@@ -56,40 +56,24 @@ async def auth_middleware(request: Request, call_next):
     return await call_next(request)
 
 
-@app.get("/login", response_class=HTMLResponse)
-async def login_page(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request, "Config": Config})
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "Config": Config})
 
 
-@app.post("/login")
-async def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    if username == Config.ZOHO_USERNAME and password == Config.ZOHO_PASSWORD:
-        response = RedirectResponse(url="/", status_code=302)
-        response.set_cookie(
-            key=API_KEY_NAME, value=Config.AUTH_TOKEN, httponly=True, secure=True, samesite="lax"
-        )
-        return response
-    else:
-        return templates.TemplateResponse(
-            "login.html",
-            {"request": request, "Config": Config, "error": "Invalid credentials"},
-            status_code=400,
-        )
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
 
 
-@app.post("/logout")
-async def logout(_: Request):
-    response = RedirectResponse(url="/login", status_code=403)
-    response.delete_cookie(API_KEY_NAME)
-    return response
-
-
-@app.get("/tasks/add_test_task")
-async def add_test_task(_: Request, token: bool = Depends(verify_token)):
+@app.get("/tasks", response_class=HTMLResponse)
+async def view_tasks(request: Request, token: bool = Depends(verify_token)):
     if not token:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated")
-    tasker.add_task(zoho_test, "mon,tue,wed,thu,fri", "19:25:00")
-    return {"message": "Test task added successfully"}
+
+    return templates.TemplateResponse(
+        request=request, name="components/task_view.html", context={"tasks": tasker.get_tasks()}
+    )
 
 
 @app.post("/tasks", response_class=HTMLResponse)
@@ -128,6 +112,14 @@ async def create_task(
     )
 
 
+@app.get("/tasks/add_test_task")
+async def add_test_task(_: Request, token: bool = Depends(verify_token)):
+    if not token:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated")
+    tasker.add_task(zoho_test, "mon,tue,wed,thu,fri", "19:25:00")
+    return {"message": "Test task added successfully"}
+
+
 @app.delete("/tasks/{task_id}", response_class=HTMLResponse)
 async def delete_task(request: Request, task_id: str, token: bool = Depends(verify_token)):
     if not token:
@@ -139,21 +131,30 @@ async def delete_task(request: Request, task_id: str, token: bool = Depends(veri
     )
 
 
-@app.get("/tasks", response_class=HTMLResponse)
-async def view_tasks(request: Request, token: bool = Depends(verify_token)):
-    if not token:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated")
-
-    return templates.TemplateResponse(
-        request=request, name="components/task_view.html", context={"tasks": tasker.get_tasks()}
-    )
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request, "Config": Config})
 
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
+@app.post("/login")
+async def login(request: Request, username: str = Form(...), password: str = Form(...)):
+    if username == Config.ZOHO_USERNAME and password == Config.ZOHO_PASSWORD:
+        response = RedirectResponse(url="/", status_code=302)
+        response.set_cookie(
+            key=API_KEY_NAME, value=Config.AUTH_TOKEN, httponly=True, secure=True, samesite="lax"
+        )
+        return response
+    else:
+        return templates.TemplateResponse(
+            "login.html",
+            {"request": request, "Config": Config, "error": "Invalid credentials"},
+            status_code=400,
+        )
 
 
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "Config": Config})
+@app.post("/logout")
+async def logout(_: Request):
+    response = RedirectResponse(url="/login", status_code=302)
+    response.delete_cookie(API_KEY_NAME)
+    response.headers["HX-Redirect"] = "/login"
+    return response

@@ -2,12 +2,37 @@
 
 {% block content %}
 <h1>Login</h1>
-<form method="POST" action="/login">
-    <input type="text" name="username" placeholder="Username">
-    <input type="password" name="password" placeholder="Password">
-    <button type="submit">Login</button>
+<form id="login-form" method="POST" action="/login" >
+    <div role="group">
+    <input id="username" type="text" name="username" placeholder="Username">
+    <div id="username-error"></div>
+    <input id="password" type="password" name="password" placeholder="Password">
+    <div id="password-error"></div>
+    <button type="submit">Login</button></div>
+    <div id="error">{{ error }}</div>
 </form>
-{% if error %}
-<div class="error">{{ error }}</div>
-{% endif %}
 {% endblock %}
+
+{% block script %}
+<script src="/static/just-validate.production.min.js"></script>
+<script>
+    const validate = new JustValidate('#login-form', {
+        lockForm: true,
+        submitFormAutomatically: true,
+    });
+
+    validate
+        .addField('#username', [
+            {
+                rule: 'required',
+                errorMessage: 'Username is required',
+            },
+        ], { errorsContainer: '#error' })
+        .addField('#password', [
+            {
+                rule: 'required',
+                errorMessage: 'Password is required',
+            },
+        ], { errorsContainer: '#error' });
+</script>
+{% endblock script %}

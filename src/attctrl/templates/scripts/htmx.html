@@ -1,0 +1,29 @@
+<script src="/static/htmx.min.js"></script>
+<script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        const apiKey = getCookie('X-API-Key');
+        if (apiKey) {
+            event.detail.headers['X-API-Key'] = apiKey;
+        }
+    });
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+</script>
+<script>
+    document.body.addEventListener('htmx:responseError', (event) => {
+        if (event.detail.xhr.status === 403) {
+            window.location.href = '/login';
+        }
+    });
+</script>
+<script>
+    document.body.addEventListener('htmx:afterRequest', function (evt) {
+        if (evt.detail.elt.id === 'new-task-form') {
+            evt.detail.elt.reset();
+        }
+    });
+</script>
