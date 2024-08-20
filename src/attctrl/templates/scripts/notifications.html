@@ -4,26 +4,88 @@
     duration: 5000,
     position: {
       x: 'right',
-      y: 'top',
+      y: 'bottom',
     },
+    ripple: false,
+    dismissible: true,
     types: [
       {
         type: 'info',
         background: '#0284c7',
         icon: false
+      },
+      {
+        type: 'success',
+        background: '#22c55e',
+        icon: false
+      },
+      {
+        type: 'warning',
+        background: '#f59e0b',
+        icon: false
+      },
+      {
+        type: 'error',
+        background: '#ef4444',
+        icon: false
       }
     ]
   });
 
-  document.body.addEventListener('htmx:afterRequest', function(evt) {
-    if (evt.detail.elt.id === 'notifications-container') {
-      const response = JSON.parse(evt.detail.xhr.responseText);
-      response.notifications.forEach(function(message) {
+  // Add custom CSS to make notifications wider
+  const style = document.createElement('style');
+  style.textContent = `
+    .notyf__toast {
+      max-width: 720px !important;
+      width: fit-content !important;
+      min-width: 300px !important;
+      white-space: nowrap !important;
+    }
+    .notyf__message {
+      padding-right: 20px !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  function fetchNotifications() {
+    fetch('/notifications', {
+      headers: {
+        'X-API-Key': document.body.getAttribute('hx-headers').match(/"X-API-Key":\s*"([^"]*)"/)[1]
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Received notifications:', data.notifications);  // Debug log
+      data.notifications.forEach(function(notification) {
         notyf.open({
-          type: 'info',
-          message: message
+          type: getNotyfType(notification.level),
+          message: notification.message
         });
       });
+    })
+    .catch(error => console.error('Error fetching notifications:', error));
+  }
+
+  function getNotyfType(level) {
+    switch(level.toLowerCase()) {
+      case 'info':
+        return 'info';
+      case 'success':
+        return 'success';
+      case 'warning':
+        return 'warning';
+      case 'error':
+        return 'error';
+      default:
+        return 'info';
     }
+  }
+
+  // Fetch notifications every 5 seconds
+  setInterval(fetchNotifications, 5000);
+
+  // Also fetch notifications after any HTMX request
+  document.body.addEventListener('htmx:afterRequest', function(evt) {
+    fetchNotifications();
   });
 </script>

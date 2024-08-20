@@ -14,11 +14,7 @@
   <main class="container">
     {% block content %} {% endblock content %}
   </main>
-  <div id="notifications-container"
-       hx-get="/api/notifications"
-       hx-trigger="every 1s"
-       hx-swap="none">
-  </div>
+  <div id="notifications-container"></div>
   {% block script %} {% endblock script %}
 </body>
 

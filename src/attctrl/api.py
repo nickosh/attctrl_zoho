@@ -12,6 +12,7 @@ from attctrl.config import Config
 from attctrl.logger import new_logger, notification_queue
 from attctrl.scheduler import TaskScheduler
 
+
 logger = new_logger(__name__)
 
 if Config.GLITCHTIP_DNS:
@@ -66,7 +67,7 @@ async def health_check():
     return {"status": "ok"}
 
 
-@app.get("/api/notifications")
+@app.get("/notifications")
 async def get_notifications(token: bool = Depends(verify_token)):
     if not token:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated")

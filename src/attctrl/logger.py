@@ -12,6 +12,11 @@ class NotificationHandler(logging.Handler):
         notification_queue.append(self.format(record))
 
 
+class NotificationFormatter(logging.Formatter):
+    def format(self, record):
+        return {"level": record.levelname, "message": record.message}
+
+
 class CustomFormatter(logging.Formatter):
     """Logging Formatter to add colors and count warning / errors"""
 
@@ -92,7 +97,7 @@ def new_logger(
     # Add notification handler if enabled
     if enable_notifications:
         notification_handler = NotificationHandler()
-        notification_handler.setFormatter(CustomFormatter())
+        notification_handler.setFormatter(NotificationFormatter())
         logger.addHandler(notification_handler)
 
     return logger
