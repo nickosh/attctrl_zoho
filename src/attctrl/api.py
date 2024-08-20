@@ -76,6 +76,18 @@ async def get_notifications(token: bool = Depends(verify_token)):
     return JSONResponse(content={"notifications": notifications})
 
 
+@app.get("/notifications/test")
+async def test_notifications(token: bool = Depends(verify_token)):
+    if not token:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated")
+    logger.info("Info test")
+    logger.warning("Warning test")
+    logger.error("Error test")
+    logger.exception("Exception test")
+    logger.critical("Critical test")
+    return {"status": "ok"}
+
+
 @app.get("/tasks", response_class=HTMLResponse)
 async def view_tasks(request: Request, token: bool = Depends(verify_token)):
     if not token:
