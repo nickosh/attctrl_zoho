@@ -44,6 +44,7 @@ src = ["src", "test"]
 target-version = "py311"
 include = ["*.py", "*.pyi", "**/pyproject.toml"]
 
+[tool.ruff.lint]
 select = [
   "I",   # iSort
   "F",   # PyFlakes
