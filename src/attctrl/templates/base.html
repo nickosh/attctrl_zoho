@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <link rel="stylesheet" href="/static/pico.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf/notyf.min.css">
   {% block header %} {% endblock %}
 </head>
 
@@ -19,19 +19,31 @@
        hx-trigger="every 5s"
        hx-swap="none">
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/notyf/notyf.min.js"></script>
   <script>
+    const notyf = new Notyf({
+      duration: 3000,
+      position: {
+        x: 'right',
+        y: 'top',
+      },
+      types: [
+        {
+          type: 'info',
+          background: '#0284c7',
+          icon: false
+        }
+      ]
+    });
+
     document.body.addEventListener('htmx:afterRequest', function(evt) {
       if (evt.detail.elt.id === 'notifications-container') {
         const response = JSON.parse(evt.detail.xhr.responseText);
         response.notifications.forEach(function(message) {
-          Toastify({
-            text: message,
-            duration: 3000,
-            close: true,
-            gravity: "top",
-            position: "right",
-          }).showToast();
+          notyf.open({
+            type: 'info',
+            message: message
+          });
         });
       }
     });
