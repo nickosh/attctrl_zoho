@@ -87,4 +87,3 @@ combine-as-imports = true
 line-ending = "lf"
 indent-style = "space"
 quote-style = "double"
-skip-magic-trailing-comma = true

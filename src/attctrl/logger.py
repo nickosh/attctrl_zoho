@@ -1,10 +1,11 @@
 import logging
+from collections import deque
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import ClassVar, Dict, List, Optional
-from collections import deque
 
-notification_queue = deque(maxlen=100)  # Limit to last 100 notifications
+notification_queue = deque(maxlen=100)
+
 
 class NotificationHandler(logging.Handler):
     def emit(self, record):
@@ -19,9 +20,7 @@ class CustomFormatter(logging.Formatter):
     red = "\x1b[31;21m"
     bold_red = "\x1b[31;1m"
     reset = "\x1b[0m"
-    format = (
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)"
-    )
+    format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)"
 
     FORMATS: ClassVar[Dict[int, str]] = {
         logging.DEBUG: grey + format + reset,
@@ -85,12 +84,8 @@ def new_logger(
 
     # If log file is provided, create file handler
     if log_file:
-        file_handler = RotatingFileHandler(
-            log_file, maxBytes=10 * 1024 * 1024, backupCount=5
-        )
-        file_formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
+        file_handler = RotatingFileHandler(log_file, maxBytes=10 * 1024 * 1024, backupCount=5)
+        file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         file_handler.setFormatter(file_formatter)
         logger.addHandler(file_handler)
 

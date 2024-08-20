@@ -24,7 +24,8 @@ repos:
     rev: v0.6.1
     hooks:
       - id: ruff
-        args: [--ignore=F401]
+        args: [--config=pyproject.toml, --ignore=F401]
         exclude: ^src/attctrl/static/
       - id: ruff-format
+        args: [--config=pyproject.toml]
         exclude: ^src/attctrl/static/

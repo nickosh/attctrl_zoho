@@ -16,38 +16,9 @@
   </main>
   <div id="notifications-container"
        hx-get="/api/notifications"
-       hx-trigger="every 5s"
+       hx-trigger="every 1s"
        hx-swap="none">
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/notyf/notyf.min.js"></script>
-  <script>
-    const notyf = new Notyf({
-      duration: 3000,
-      position: {
-        x: 'right',
-        y: 'top',
-      },
-      types: [
-        {
-          type: 'info',
-          background: '#0284c7',
-          icon: false
-        }
-      ]
-    });
-
-    document.body.addEventListener('htmx:afterRequest', function(evt) {
-      if (evt.detail.elt.id === 'notifications-container') {
-        const response = JSON.parse(evt.detail.xhr.responseText);
-        response.notifications.forEach(function(message) {
-          notyf.open({
-            type: 'info',
-            message: message
-          });
-        });
-      }
-    });
-  </script>
   {% block script %} {% endblock script %}
 </body>
 

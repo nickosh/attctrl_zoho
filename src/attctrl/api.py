@@ -2,7 +2,7 @@ from typing import Optional
 
 import sentry_sdk
 from fastapi import Depends, FastAPI, Form, HTTPException, Request, Security, status
-from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import APIKeyHeader
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -66,13 +66,24 @@ async def health_check():
     return {"status": "ok"}
 
 
+@app.get("/api/notifications")
+async def get_notifications(token: bool = Depends(verify_token)):
+    if not token:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated")
+    notifications = list(notification_queue)
+    notification_queue.clear()
+    return JSONResponse(content={"notifications": notifications})
+
+
 @app.get("/tasks", response_class=HTMLResponse)
 async def view_tasks(request: Request, token: bool = Depends(verify_token)):
     if not token:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated")
 
     return templates.TemplateResponse(
-        request=request, name="components/task_view.html", context={"tasks": tasker.get_tasks()}
+        request=request,
+        name="components/task_view.html",
+        context={"tasks": tasker.get_tasks()},
     )
 
 
@@ -98,17 +109,25 @@ async def create_task(
     days = ",".join(
         [day for day in [monday, tuesday, wednesday, thursday, friday, saturday, sunday] if day]
     )
-    task_function = {"checkin": zoho_check_in, "checkout": zoho_check_out, "test": zoho_test}.get(
-        task_type
-    )
+    task_function = {
+        "checkin": zoho_check_in,
+        "checkout": zoho_check_out,
+        "test": zoho_test,
+    }.get(task_type)
 
     if task_function:
         tasker.add_task(
-            task_func=task_function, day_of_week=days, time=time, jitter=jitter, timezone=timezone
+            task_func=task_function,
+            day_of_week=days,
+            time=time,
+            jitter=jitter,
+            timezone=timezone,
         )
 
     return templates.TemplateResponse(
-        request=request, name="components/task_view.html", context={"tasks": tasker.get_tasks()}
+        request=request,
+        name="components/task_view.html",
+        context={"tasks": tasker.get_tasks()},
     )
 
 
@@ -127,7 +146,9 @@ async def delete_task(request: Request, task_id: str, token: bool = Depends(veri
 
     tasker.remove_task(task_id)
     return templates.TemplateResponse(
-        request=request, name="components/task_view.html", context={"tasks": tasker.get_tasks()}
+        request=request,
+        name="components/task_view.html",
+        context={"tasks": tasker.get_tasks()},
     )
 
 
@@ -141,7 +162,11 @@ async def login(request: Request, username: str = Form(...), password: str = For
     if username == Config.ZOHO_USERNAME and password == Config.ZOHO_PASSWORD:
         response = RedirectResponse(url="/", status_code=302)
         response.set_cookie(
-            key=API_KEY_NAME, value=Config.AUTH_TOKEN, httponly=True, secure=True, samesite="lax"
+            key=API_KEY_NAME,
+            value=Config.AUTH_TOKEN,
+            httponly=True,
+            secure=True,
+            samesite="lax",
         )
         return response
     else:
@@ -158,11 +183,3 @@ async def logout(_: Request):
     response.delete_cookie(API_KEY_NAME)
     response.headers["HX-Redirect"] = "/login"
     return response
-
-@app.get("/api/notifications")
-async def get_notifications(token: bool = Depends(verify_token)):
-    if not token:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authenticated")
-    notifications = list(notification_queue)
-    notification_queue.clear()
-    return JSONResponse(content={"notifications": notifications})
