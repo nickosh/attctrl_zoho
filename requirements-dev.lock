@@ -10,67 +10,25 @@
 #   universal: false
 
 -e file:.
-aider-chat==0.50.1
-aiohappyeyeballs==2.3.5
-    # via aider-chat
-    # via aiohttp
-aiohttp==3.10.3
-    # via aider-chat
-    # via litellm
-aiosignal==1.3.1
-    # via aider-chat
-    # via aiohttp
 annotated-types==0.7.0
-    # via aider-chat
     # via pydantic
 anyio==4.4.0
-    # via aider-chat
     # via httpx
-    # via openai
     # via starlette
     # via watchfiles
 apscheduler==3.10.4
     # via attctrl
-attrs==24.2.0
-    # via aider-chat
-    # via aiohttp
-    # via jsonschema
-    # via referencing
-backoff==2.2.1
-    # via aider-chat
-beautifulsoup4==4.12.3
-    # via aider-chat
 certifi==2024.7.4
-    # via aider-chat
     # via httpcore
     # via httpx
-    # via requests
     # via sentry-sdk
-cffi==1.17.0
-    # via aider-chat
-    # via sounddevice
-    # via soundfile
 cfgv==3.4.0
     # via pre-commit
-charset-normalizer==3.3.2
-    # via aider-chat
-    # via requests
 click==8.1.7
-    # via aider-chat
-    # via litellm
     # via typer
     # via uvicorn
-configargparse==1.7
-    # via aider-chat
-diff-match-patch==20230430
-    # via aider-chat
-diskcache==5.6.3
-    # via aider-chat
 distlib==0.3.8
     # via virtualenv
-distro==1.9.0
-    # via aider-chat
-    # via openai
 dnspython==2.6.1
     # via email-validator
 email-validator==2.2.0
@@ -80,229 +38,79 @@ fastapi==0.112.1
 fastapi-cli==0.0.5
     # via fastapi
 filelock==3.15.4
-    # via aider-chat
-    # via huggingface-hub
     # via virtualenv
-flake8==7.1.1
-    # via aider-chat
-frozenlist==1.4.1
-    # via aider-chat
-    # via aiohttp
-    # via aiosignal
-fsspec==2024.6.1
-    # via aider-chat
-    # via huggingface-hub
-gitdb==4.0.11
-    # via aider-chat
-    # via gitpython
-gitpython==3.1.43
-    # via aider-chat
 greenlet==3.0.3
     # via playwright
     # via sqlalchemy
-grep-ast==0.3.3
-    # via aider-chat
 h11==0.14.0
-    # via aider-chat
     # via httpcore
     # via uvicorn
 httpcore==1.0.5
-    # via aider-chat
     # via httpx
 httptools==0.6.1
     # via uvicorn
 httpx==0.27.0
-    # via aider-chat
     # via fastapi
-    # via openai
-huggingface-hub==0.24.5
-    # via aider-chat
-    # via tokenizers
 identify==2.6.0
     # via pre-commit
 idna==3.7
-    # via aider-chat
     # via anyio
     # via email-validator
     # via httpx
-    # via requests
-    # via yarl
-importlib-metadata==7.2.1
-    # via aider-chat
-    # via litellm
-importlib-resources==6.4.0
-    # via aider-chat
 jinja2==3.1.4
-    # via aider-chat
     # via fastapi
-    # via litellm
-jiter==0.5.0
-    # via aider-chat
-    # via openai
-jsonschema==4.23.0
-    # via aider-chat
-    # via litellm
-jsonschema-specifications==2023.12.1
-    # via aider-chat
-    # via jsonschema
-litellm==1.43.9
-    # via aider-chat
 markdown-it-py==3.0.0
-    # via aider-chat
     # via rich
 markupsafe==2.1.5
-    # via aider-chat
     # via jinja2
-mccabe==0.7.0
-    # via aider-chat
-    # via flake8
 mdurl==0.1.2
-    # via aider-chat
     # via markdown-it-py
-multidict==6.0.5
-    # via aider-chat
-    # via aiohttp
-    # via yarl
-networkx==3.2.1
-    # via aider-chat
 nodeenv==1.9.1
     # via pre-commit
-numpy==1.26.4
-    # via aider-chat
-    # via scipy
-openai==1.40.6
-    # via aider-chat
-    # via litellm
-packaging==24.1
-    # via aider-chat
-    # via huggingface-hub
-pathspec==0.12.1
-    # via aider-chat
-    # via grep-ast
-pillow==10.4.0
-    # via aider-chat
 platformdirs==4.2.2
     # via virtualenv
 playwright==1.46.0
     # via attctrl
 pre-commit==3.8.0
-prompt-toolkit==3.0.47
-    # via aider-chat
-    # via pypager
-pycodestyle==2.12.1
-    # via aider-chat
-    # via flake8
-pycparser==2.22
-    # via aider-chat
-    # via cffi
 pydantic==2.8.2
-    # via aider-chat
     # via fastapi
-    # via litellm
-    # via openai
 pydantic-core==2.20.1
-    # via aider-chat
     # via pydantic
 pyee==11.1.0
     # via playwright
-pyflakes==3.2.0
-    # via aider-chat
-    # via flake8
 pygments==2.18.0
-    # via aider-chat
-    # via pypager
     # via rich
-pypager==3.0.1
-    # via aider-chat
-pypandoc==1.13
-    # via aider-chat
-pyperclip==1.9.0
-    # via aider-chat
 python-decouple==3.8
     # via attctrl
 python-dotenv==1.0.1
-    # via aider-chat
-    # via litellm
     # via uvicorn
 python-multipart==0.0.9
     # via fastapi
 pytz==2024.1
     # via apscheduler
 pyyaml==6.0.2
-    # via aider-chat
-    # via huggingface-hub
     # via pre-commit
     # via uvicorn
-referencing==0.35.1
-    # via aider-chat
-    # via jsonschema
-    # via jsonschema-specifications
-regex==2024.7.24
-    # via aider-chat
-    # via tiktoken
-requests==2.32.3
-    # via aider-chat
-    # via huggingface-hub
-    # via litellm
-    # via tiktoken
 rich==13.7.1
-    # via aider-chat
     # via typer
-rpds-py==0.20.0
-    # via aider-chat
-    # via jsonschema
-    # via referencing
 ruff==0.6.1
-scipy==1.13.1
-    # via aider-chat
 sentry-sdk==2.13.0
     # via attctrl
 shellingham==1.5.4
     # via typer
 six==1.16.0
     # via apscheduler
-smmap==5.0.1
-    # via aider-chat
-    # via gitdb
 sniffio==1.3.1
-    # via aider-chat
     # via anyio
     # via httpx
-    # via openai
-sounddevice==0.5.0
-    # via aider-chat
-soundfile==0.12.1
-    # via aider-chat
-soupsieve==2.5
-    # via aider-chat
-    # via beautifulsoup4
 sqlalchemy==2.0.32
     # via attctrl
 starlette==0.38.2
     # via fastapi
-tiktoken==0.7.0
-    # via aider-chat
-    # via litellm
-tokenizers==0.19.1
-    # via aider-chat
-    # via litellm
-tqdm==4.66.5
-    # via aider-chat
-    # via huggingface-hub
-    # via openai
-tree-sitter==0.21.3
-    # via aider-chat
-    # via tree-sitter-languages
-tree-sitter-languages==1.10.2
-    # via aider-chat
-    # via grep-ast
 typer==0.12.4
     # via fastapi-cli
 typing-extensions==4.12.2
-    # via aider-chat
     # via fastapi
-    # via huggingface-hub
-    # via openai
     # via pydantic
     # via pydantic-core
     # via pyee
@@ -311,8 +119,6 @@ typing-extensions==4.12.2
 tzlocal==5.2
     # via apscheduler
 urllib3==2.2.2
-    # via aider-chat
-    # via requests
     # via sentry-sdk
 uvicorn==0.30.6
     # via fastapi
@@ -323,14 +129,5 @@ virtualenv==20.26.3
     # via pre-commit
 watchfiles==0.23.0
     # via uvicorn
-wcwidth==0.2.13
-    # via aider-chat
-    # via prompt-toolkit
 websockets==12.0
     # via uvicorn
-yarl==1.9.4
-    # via aider-chat
-    # via aiohttp
-zipp==3.20.0
-    # via aider-chat
-    # via importlib-metadata

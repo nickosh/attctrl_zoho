@@ -29,7 +29,6 @@ managed = true
 dev-dependencies = [
     "ruff>=0.6.1",
     "pre-commit>=3.8.0",
-    "aider-chat>=0.50.1",
 ]
 
 [tool.hatch.metadata]
