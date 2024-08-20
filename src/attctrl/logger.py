@@ -12,7 +12,9 @@ class CustomFormatter(logging.Formatter):
     red = "\x1b[31;21m"
     bold_red = "\x1b[31;1m"
     reset = "\x1b[0m"
-    format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)"
+    format = (
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)"
+    )
 
     FORMATS: ClassVar[Dict[int, str]] = {
         logging.DEBUG: grey + format + reset,
@@ -49,7 +51,10 @@ class CustomFilter(logging.Filter):
 
 
 def new_logger(
-    name: str, level: str = "DEBUG", no_repeat: bool = False, log_file: Optional[str] = None
+    name: str,
+    level: str = "DEBUG",
+    no_repeat: bool = False,
+    log_file: Optional[str] = None,
 ) -> logging.Logger:
     """
     Create a logger with a custom formatter.
@@ -72,8 +77,12 @@ def new_logger(
 
     # If log file is provided, create file handler
     if log_file:
-        file_handler = RotatingFileHandler(log_file, maxBytes=10 * 1024 * 1024, backupCount=5)
-        file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        file_handler = RotatingFileHandler(
+            log_file, maxBytes=10 * 1024 * 1024, backupCount=5
+        )
+        file_formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
         file_handler.setFormatter(file_formatter)
         logger.addHandler(file_handler)
 
