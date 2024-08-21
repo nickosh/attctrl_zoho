@@ -31,6 +31,10 @@ dev-dependencies = [
     "pre-commit>=3.8.0",
 ]
 
+[tool.rye.scripts]
+start-prod = "fastapi run --port 9898 src/attctrl/main.py"
+start-dev = "fastapi dev --port 9898 --reload src/attctrl/main.py"
+
 [tool.hatch.metadata]
 allow-direct-references = true
 
