@@ -4,11 +4,14 @@
 {% endblock header %}
 
 {% block content %}
-<section class="grid">
+<section>
+    <div class="grid">
     <h1>Zoho People Attendance Control</h1>
     {% if Config.APP_AUTH %}
     <button hx-post="/logout" hx-trigger="click" hx-swap="none">Logout</button>
     {% endif %}
+    </div>
+    {% include "components/datetime.html" %}
 </section>
 <section>
     {% include "components/new_task.html" %}

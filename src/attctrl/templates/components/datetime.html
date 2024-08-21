@@ -1,0 +1,29 @@
+<div id="datetime-display">
+    Server's datetime: <span id="current-datetime"></span>
+</div>
+<script>
+    const serverTime = new Date("{{ server_time }}");
+    const serverTimezone = "{{ server_timezone }}";
+    let currentTime = new Date(serverTime);
+
+    function updateDateTime() {
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZone: serverTimezone,
+            hour12: false
+        };
+
+        document.getElementById('current-datetime').textContent =
+            currentTime.toLocaleString('ja-JP', options) + ' ' + serverTimezone;
+
+        currentTime.setSeconds(currentTime.getSeconds() + 1);
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+</script>

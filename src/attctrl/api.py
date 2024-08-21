@@ -6,14 +6,17 @@ from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import APIKeyHeader
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
+from datetime import datetime
 from attctrl.browser import zoho_check_in, zoho_check_out, zoho_test
 from attctrl.config import Config
 from attctrl.logger import new_logger, notification_queue
 from attctrl.scheduler import TaskScheduler
-
+import pytz
+import os
 
 logger = new_logger(__name__)
+
+server_timezone = pytz.timezone(os.environ.get("TZ", "UTC"))
 
 if Config.GLITCHTIP_DNS:
     sentry_sdk.init(Config.GLITCHTIP_DNS)
@@ -59,7 +62,16 @@ async def auth_middleware(request: Request, call_next):
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "Config": Config})
+    server_time = datetime.now().isoformat()
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "Config": Config,
+            "server_time": server_time,
+            "server_timezone": server_timezone,
+        },
+    )
 
 
 @app.get("/health")
