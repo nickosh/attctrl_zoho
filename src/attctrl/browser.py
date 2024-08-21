@@ -169,6 +169,7 @@ class BrowserControl:
 
 
 def zoho_check_in():
+    logger.info("Zoho check-in started")
     with BrowserControl() as browser:
         if browser.do_check_in():
             logger.info("Zoho check-in successfully completed")
@@ -177,6 +178,7 @@ def zoho_check_in():
 
 
 def zoho_check_out():
+    logger.info("Zoho check-out started")
     with BrowserControl() as browser:
         if browser.do_check_out():
             logger.info("Zoho check-out successfully completed")
@@ -185,5 +187,6 @@ def zoho_check_out():
 
 
 def zoho_test():
+    logger.info("Zoho test started")
     with BrowserControl() as browser:
         browser.do_test()
