@@ -24,6 +24,7 @@ class LoginPage(BasicPage):
         self.next_button = page.locator("button#nextbtn")
         self.understand_button = page.locator("button#continue_button")
         self.daily_limit = page.locator("text=You've reached your daily sign-in limit.")
+        self.mfa_reminder = page.locator("text=Remind me later")
 
     def is_daily_limit_warning(self) -> bool:
         try:
@@ -35,6 +36,13 @@ class LoginPage(BasicPage):
     def is_daily_limit_reached(self) -> bool:
         try:
             expect(self.daily_limit).to_be_visible()
+            return True
+        except Exception:
+            return False
+
+    def is_mfa_reminder(self) -> bool:
+        try:
+            expect(self.mfa_reminder).to_be_visible()
             return True
         except Exception:
             return False
@@ -106,19 +114,19 @@ class BrowserControl:
             raise EnvironmentError(msg)
         self.login_pg.password_input.fill(password)
         self.login_pg.next_button.click()
+        if self.login_pg.is_mfa_reminder():
+            self.login_pg.mfa_reminder.click()
         if self.login_pg.is_daily_limit_warning():
             self.login_pg.understand_button.click()
         self.dashboard_pg.wait_for_loading()
         self.dashboard_pg.att_button.wait_for(state="visible")
 
     def logout(self):
-        self.dashboard_pg.wait_for_loading()
         self.dashboard_pg.profile_avatar.click()
         self.dashboard_pg.sign_out_link.click()
         self.dashboard_pg.wait_for_logout()
 
     def switch_attendancy(self):
-        self.context.grant_permissions(["geolocation"])
         self.dashboard_pg.att_button.click()
         self.page.wait_for_timeout(5 * 1000)
 
