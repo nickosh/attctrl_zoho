@@ -184,7 +184,7 @@ async def login_page(request: Request):
 
 @app.post("/login")
 async def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    if username == Config.ZOHO_USERNAME and password == Config.ZOHO_PASSWORD:
+    if username == Config.APP_USERNAME and password == Config.APP_PASSWORD:
         response = RedirectResponse(url="/", status_code=302)
         response.set_cookie(
             key=API_KEY_NAME,

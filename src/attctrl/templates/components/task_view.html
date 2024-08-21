@@ -1,35 +1,49 @@
 <div id="task-view">
     <h2>Current tasks</h2>
-    <table>
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Task type</th>
-                <th scope="col">Days of week</th>
-                <th scope="col">Time</th>
-                <th scope="col">Jitter</th>
-                <th scope="col">Timezone</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in tasks %}
-            <tr>
-                <th scope="row">{{task.id}}</th>
-                <td>{{task.func}}</td>
-                <td>{{task.dow}}</td>
-                <td>{{task.time}}</td>
-                <td>{{task.jitter}}</td>
-                <td>{{task.timezone}}</td>
-                <td>
-                    <button type="button" class="outline" hx-delete="/tasks/{{task.id}}" hx-target="#task-view"
-                        hx-swap="outerHTML">
-                        Delete
-                    </button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <figure>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Task type</th>
+                    <th scope="col">Days of week</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Jitter</th>
+                    <th scope="col">Timezone</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <th scope="row">{{task.id}}</th>
+                    <td>{{task.func}}</td>
+                    <td>{{task.dow}}</td>
+                    <td>{{task.time}}</td>
+                    <td>{{task.jitter}}</td>
+                    <td>{{task.timezone}}</td>
+                    <td>
+                        <button type="button" class="outline" hx-delete="/tasks/{{task.id}}" hx-target="#task-view"
+                            hx-swap="outerHTML">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </figure>
     <small>* Please note, that Zoho allowed only 20 log-in events per day.</small>
 </div>
+<style>
+    @media (max-width: 767px) {
+        figure {
+            margin: 0;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            min-width: 600px;
+        }
+    }
+</style>

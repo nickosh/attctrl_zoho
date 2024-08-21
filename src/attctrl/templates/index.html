@@ -5,20 +5,18 @@
 
 {% block content %}
 <section>
-    <div class="grid">
     <h1>Zoho People Attendance Control</h1>
-    {% if Config.APP_AUTH %}
-    <button hx-post="/logout" hx-trigger="click" hx-swap="none">Logout</button>
-    {% endif %}
-    </div>
     {% include "components/datetime.html" %}
 </section>
 <section>
     {% include "components/new_task.html" %}
 </section>
 <section>
-<div hx-get="/tasks" hx-trigger="load" />
+    <div hx-get="/tasks" hx-trigger="load" />
 </section>
+{% if Config.APP_AUTH %}
+    <button class="outline secondary" hx-post="/logout" hx-trigger="click" hx-swap="none">Logout</button>
+{% endif %}
 {% endblock content %}
 
 {% block script %}
