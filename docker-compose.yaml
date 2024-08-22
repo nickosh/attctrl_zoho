@@ -14,8 +14,9 @@ services:
       - "${APP_PORT:-9898}:${APP_PORT:-9898}"
     volumes:
     - attctrl_data:/app/data
-    - /etc/timezone:/etc/timezone:ro
-    - /etc/localtime:/etc/localtime:ro
+    # Uncomment the following lines to sync the app with the server's timezone and localtime
+    #- /etc/timezone:/etc/timezone:ro
+    #- /etc/localtime:/etc/localtime:ro
 
 volumes:
   attctrl_data:
