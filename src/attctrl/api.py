@@ -1,18 +1,19 @@
+import os
+from datetime import datetime
 from typing import Optional
 
+import pytz
 import sentry_sdk
 from fastapi import Depends, FastAPI, Form, HTTPException, Request, Security, status
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import APIKeyHeader
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from datetime import datetime
+
 from attctrl.browser import zoho_check_in, zoho_check_out, zoho_test
 from attctrl.config import Config
 from attctrl.logger import new_logger, notification_queue
 from attctrl.scheduler import TaskScheduler
-import pytz
-import os
 
 logger = new_logger(__name__)
 
@@ -24,7 +25,11 @@ if Config.GLITCHTIP_DNS:
 API_KEY_NAME = "X-API-Key"
 
 tasker = TaskScheduler()
-app = FastAPI(workers=1)
+app = FastAPI(
+    workers=1,
+    docs_url="/docs" if Config.DEBUG else None,
+    redoc_url="/redoc" if Config.DEBUG else None,
+)
 app.mount("/static", StaticFiles(directory=Config.STATIC_DIR), name="static")
 templates = Jinja2Templates(directory=Config.TEMPLATE_DIR)
 api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
